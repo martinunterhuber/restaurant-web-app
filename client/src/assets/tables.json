@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "capacity": 5,
+        "location": "left of the entrance"
+    },
+    {
+        "id": 2,
+        "capacity": 5,
+        "location": "right of the entrance"
+    },
+    {
+        "id": 3,
+        "capacity": 5,
+        "location": "front right corner"
+    }
+]

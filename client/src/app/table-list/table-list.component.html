@@ -1,0 +1,18 @@
+<div class="tables">
+  <app-table-detail 
+    *ngFor="let table of tableList" 
+    [table]="table"
+    (saveEvent)="saveTable($event.table, $event.oldId)"
+    (deleteEvent)="deleteTable($event)"
+    [listErrorMessage]="errorMessage"
+    ></app-table-detail>
+</div>
+<button *ngIf="!isAdd" (click)="add()" mat-raised-button color="primary"><mat-icon>add</mat-icon> Add New Table</button>
+<app-table-detail 
+  *ngIf="isAdd" 
+  (cancelEvent)="cancelAdd()" 
+  (saveEvent)="saveTable($event.table, $event.oldId)"
+  (deleteEvent)="deleteTable($event)"
+  [table]="{'id': 0, 'capacity': 0, 'location': ''}"
+  [listErrorMessage]="errorMessage"
+  ></app-table-detail>

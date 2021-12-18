@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.error {
+    border-radius: .25rem;
+    padding: .5rem;
+    margin-top: .5rem;
+    background-color: #f8d7da;
+    color: #842029;
+    border-color: #f5c2c7;
+}
+
+.success {
+    position: relative;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: .25rem;
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+}

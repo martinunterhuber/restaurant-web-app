@@ -1,0 +1,9 @@
+td:first-child {
+    font-weight: bold;
+    padding-right: 1rem;
+}
+
+.mat-button-base {
+    margin-top: .25rem;
+    margin-right: .5rem;
+}
