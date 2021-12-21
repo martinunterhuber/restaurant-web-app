@@ -1,0 +1,18 @@
+<div class="list-grid">
+  <app-category-detail 
+    *ngFor="let category of categoryList" 
+    [category]="category"
+    (saveEvent)="saveCategory($event.category, $event.oldName)"
+    (deleteEvent)="deleteCategory($event)"
+    [listErrorMessage]="errorMessage"
+    ></app-category-detail>
+</div>
+<button *ngIf="!isAdd" (click)="add()" mat-raised-button color="primary"><mat-icon>add</mat-icon> Add New Category</button>
+<app-category-detail 
+  *ngIf="isAdd" 
+  (cancelEvent)="cancelAdd()" 
+  (saveEvent)="saveCategory($event.category, $event.oldName)"
+  (deleteEvent)="deleteCategory($event)"
+  [category]="createCategory()"
+  [listErrorMessage]="errorMessage"
+  ></app-category-detail>

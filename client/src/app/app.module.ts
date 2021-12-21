@@ -16,12 +16,18 @@ import { TableDetailComponent } from './table-detail/table-detail.component';
 import { ROUTES } from './app.routes';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CategoryListComponent } from './category-list/category-list.component';
+import { CategoryDetailComponent } from './category-detail/category-detail.component';
+import { CategoryListService } from './category-list.service';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
-  declarations: [		
+  declarations: [				
     AppComponent,
       TableListComponent,
-      TableDetailComponent
+      TableDetailComponent,
+      CategoryListComponent,
+      CategoryDetailComponent
    ],
   imports: [
     RouterModule.forRoot(ROUTES, { useHash: true }),
@@ -34,9 +40,10 @@ import { FormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatCardModule
+    MatCardModule,
+    MatSelectModule
   ],
-  providers: [TableListService],
+  providers: [TableListService, CategoryListService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

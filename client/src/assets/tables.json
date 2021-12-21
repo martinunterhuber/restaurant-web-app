@@ -1,17 +1,17 @@
 [
     {
-        "id": 1,
-        "capacity": 5,
+        "number": 1,
+        "seats": 5,
         "location": "left of the entrance"
     },
     {
-        "id": 2,
-        "capacity": 5,
+        "number": 2,
+        "seats": 5,
         "location": "right of the entrance"
     },
     {
-        "id": 3,
-        "capacity": 5,
+        "number": 3,
+        "seats": 5,
         "location": "front right corner"
     }
 ]

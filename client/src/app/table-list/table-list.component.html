@@ -1,8 +1,8 @@
-<div class="tables">
+<div class="list-grid">
   <app-table-detail 
     *ngFor="let table of tableList" 
     [table]="table"
-    (saveEvent)="saveTable($event.table, $event.oldId)"
+    (saveEvent)="saveTable($event.table, $event.oldNumber)"
     (deleteEvent)="deleteTable($event)"
     [listErrorMessage]="errorMessage"
     ></app-table-detail>
@@ -11,8 +11,8 @@
 <app-table-detail 
   *ngIf="isAdd" 
   (cancelEvent)="cancelAdd()" 
-  (saveEvent)="saveTable($event.table, $event.oldId)"
+  (saveEvent)="saveTable($event.table, $event.oldNumber)"
   (deleteEvent)="deleteTable($event)"
-  [table]="{'id': 0, 'capacity': 0, 'location': ''}"
+  [table]="{'number': 0, 'seats': 0, 'location': ''}"
   [listErrorMessage]="errorMessage"
   ></app-table-detail>

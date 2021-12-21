@@ -1,5 +1,5 @@
 export interface Table {
-    id: number;
-    capacity: number;
+    number: number;
+    seats: number;
     location: string;
 }

@@ -16,20 +16,20 @@ export class TableListService {
     return this.tableList;
   }
 
-  public getTableById(id: number): Table | undefined {
-    return this.tableList.find(table => table.id == id);
+  public getTableByNumber(number: number): Table | undefined {
+    return this.tableList.find(table => table.number == number);
   }
 
   public addTable(table: Table) {
     this.tableList.push(table);
   }
 
-  public updateTable(table: Table, oldId: number) {
-    this.tableList[this.tableList.findIndex(table => table.id == oldId)] = table;
+  public updateTable(table: Table, oldNumber: number) {
+    this.tableList[this.tableList.findIndex(table => table.number == oldNumber)] = table;
   }
 
-  public deleteTable(id: number) {
-    let tableIndex = this.tableList.findIndex(table => table.id == id);
+  public deleteTable(number: number) {
+    let tableIndex = this.tableList.findIndex(table => table.number == number);
     if (tableIndex >= 0) {
       this.tableList.splice(tableIndex, 1);
     }

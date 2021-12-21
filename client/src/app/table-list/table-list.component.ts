@@ -30,20 +30,20 @@ export class TableListComponent {
     this.isAdd = false;
   }
 
-  public saveTable(table: Table, oldId: number) {
-    if (table.id != oldId && this.listService.getTableById(table.id) !== undefined) {
+  public saveTable(table: Table, oldNumber: number) {
+    if (table.number != oldNumber && this.listService.getTableByNumber(table.number) !== undefined) {
       this.errorMessage = "Duplicate table number!"
-    } else if (oldId == 0) {
+    } else if (oldNumber == 0) {
       this.errorMessage = "";
       this.listService.addTable(table);
       this.cancelAdd();
     } else {
       this.errorMessage = "";
-      this.listService.updateTable(table, oldId);
+      this.listService.updateTable(table, oldNumber);
     }
   }
 
-  public deleteTable(id: number) {
-    this.listService.deleteTable(id);
+  public deleteTable(number: number) {
+    this.listService.deleteTable(number);
   }
 }

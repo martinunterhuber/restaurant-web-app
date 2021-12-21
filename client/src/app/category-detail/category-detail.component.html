@@ -1,18 +1,18 @@
-<mat-card *ngIf="table" style="margin: 1rem;">
-  <h2>Table #{{ table.number }}</h2>
+<mat-card *ngIf="category" style="margin: 1rem;">
+  <h2 *ngIf="category.name">{{ category.name }}</h2>
+  <h2 *ngIf="!category.name">New Category</h2>
   <div *ngIf="!isEdit">
     <table>
       <tbody>
-        <tr><td>Number</td> <td>{{ table.number }}</td></tr>
-        <tr><td>Seats <td>{{ table.seats }}</td></tr>
-        <tr><td>Location</td> <td>{{ table.location }}</td></tr>
+        <tr><td>Name </td> <td>{{ category.name }}</td></tr>
+        <tr><td>Type <td>{{ category.type }}</td></tr>
       </tbody>
     </table>
     <button *ngIf="!isDelete && !isNew" mat-raised-button color="primary" (click)="edit()"><mat-icon>edit</mat-icon> Edit</button>
     <button *ngIf="!isDelete && !isNew" (click)="tryDelete()" mat-raised-button color="warn"><mat-icon>delete</mat-icon> Delete</button>
 
     <div *ngIf="isDelete" style="margin-top: 1rem;">
-      <div>Do you really want to delete this Table?</div>
+      <div>Do you really want to delete this Category?</div>
       <button mat-raised-button (click)="cancelDelete()" color="primary">No</button>
       <button mat-raised-button (click)="confirmDelete()" color="warn">Yes</button>
     </div>
@@ -20,20 +20,19 @@
   <form *ngIf="isEdit">
     <div>
       <mat-form-field appearance="outline">
-        <mat-label>Number</mat-label>
-        <input matInput type="number" min="1" id="number" name="number" required [(ngModel)]="editedTable!.number">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" id="name" name="name" [(ngModel)]="editedCategory!.name">
       </mat-form-field>
     </div>
     <div>
-      <mat-form-field appearance="outline">
-        <mat-label>Seats</mat-label>
-        <input matInput type="number" min="1" id="seats" name="seats" required [(ngModel)]="editedTable!.seats">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field appearance="outline">
-        <mat-label>Location</mat-label>
-        <input matInput type="text" id="location" name="location" [(ngModel)]="editedTable!.location">
+      <mat-form-field appearance="fill">
+        <mat-label>Choose an option</mat-label>
+        <mat-select #typeSelect [(ngModel)]="editedCategory!.type" name="type" id="type">
+          <ng-container *ngFor="let type of TYPE_KEYS">
+            <mat-option [value]="TYPES[type]">{{ TYPES[type] }}</mat-option>
+          </ng-container>
+          
+        </mat-select>
       </mat-form-field>
     </div>
     <button mat-raised-button color="primary" (click)="save()"><mat-icon>save</mat-icon> Save</button>

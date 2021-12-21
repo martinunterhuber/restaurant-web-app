@@ -19,7 +19,7 @@ export class TableDetailComponent implements OnInit {
   deleteEvent = new EventEmitter<number>()
 
   @Output()
-  saveEvent = new EventEmitter<{table: Table, oldId: number}>()
+  saveEvent = new EventEmitter<{table: Table, oldNumber: number}>()
   
   isDelete = false;
   isEdit = false;
@@ -31,7 +31,7 @@ export class TableDetailComponent implements OnInit {
   errorMessage = "";
 
   ngOnInit(): void {
-    if (this.table.id == 0) {
+    if (this.table.number == 0) {
       this.isNew = true;
       this.edit();
     }
@@ -42,7 +42,7 @@ export class TableDetailComponent implements OnInit {
   }
 
   public confirmDelete() {
-    this.deleteEvent.emit(this.table.id);
+    this.deleteEvent.emit(this.table.number);
   }
 
   public cancelDelete() {
@@ -55,13 +55,13 @@ export class TableDetailComponent implements OnInit {
   }
 
   public save() {
-    if (this.editedTable!.id <= 0){
+    if (this.editedTable!.number <= 0){
       this.errorMessage = "Table number must be greater than 0!";
-    } else if (this.editedTable!.capacity <= 0) {
+    } else if (this.editedTable!.seats <= 0) {
       this.errorMessage = "Number of seats must be greater than 0!";
     } else {
       this.errorMessage = "";
-      this.saveEvent.emit({table: this.editedTable!, oldId: this.table.id});
+      this.saveEvent.emit({table: this.editedTable!, oldNumber: this.table.number});
     }
   }
 
