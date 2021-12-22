@@ -1,9 +1,11 @@
 [
     {
+        "categoryId": 1,
         "name": "Pizza",
         "type": "food"
     },
     {
+        "categoryId": 2,
         "name": "Beer",
         "type": "beverage"
     }

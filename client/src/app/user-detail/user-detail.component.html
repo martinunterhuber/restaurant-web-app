@@ -1,19 +1,20 @@
-<mat-card *ngIf="category" style="margin: 1rem;">
-  <h2 *ngIf="category.name">{{ category.name }}</h2>
-  <h2 *ngIf="!category.name">New Category</h2>
+<mat-card *ngIf="user" style="margin: 1rem;">
+  <h2 *ngIf="user.name">{{ user.name }}</h2>
+  <h2 *ngIf="!user.name">New User</h2>
   <div *ngIf="!isEdit">
     <table>
       <tbody>
-        <tr><td>ID </td> <td>{{ category.categoryId }}</td></tr>
-        <tr><td>Name </td> <td>{{ category.name }}</td></tr>
-        <tr><td>Type <td>{{ category.type }}</td></tr>
+        <tr><td>ID </td> <td>{{ user.userId }}</td></tr>
+        <tr><td>Name </td> <td>{{ user.name }}</td></tr>
+        <tr><td>Password <td>*****</td></tr>
+        <tr><td>Roles <td>{{ user.role }}</td></tr>
       </tbody>
     </table>
     <button *ngIf="!isDelete && !isNew" mat-raised-button color="primary" (click)="edit()"><mat-icon>edit</mat-icon> Edit</button>
     <button *ngIf="!isDelete && !isNew" (click)="tryDelete()" mat-raised-button color="warn"><mat-icon>delete</mat-icon> Delete</button>
 
     <div *ngIf="isDelete" style="margin-top: 1rem;">
-      <div>Do you really want to delete this Category?</div>
+      <div>Do you really want to delete this User?</div>
       <button mat-raised-button (click)="cancelDelete()" color="primary">No</button>
       <button mat-raised-button (click)="confirmDelete()" color="warn">Yes</button>
     </div>
@@ -22,17 +23,22 @@
     <div>
       <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
-        <input matInput type="text" id="name" name="name" [(ngModel)]="editedCategory!.name">
+        <input matInput type="text" id="name" name="name" [(ngModel)]="editedUser!.name">
       </mat-form-field>
     </div>
+    <!-- <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" id="password" name="password" [(ngModel)]="editedUser!.password">
+      </mat-form-field>
+    </div> -->
     <div>
-      <mat-form-field appearance="fill">
-        <mat-label>Type</mat-label>
-        <mat-select #typeSelect [(ngModel)]="editedCategory!.type" name="type" id="type">
-          <ng-container *ngFor="let type of TYPE_KEYS">
-            <mat-option [value]="TYPES[type]">{{ TYPES[type] }}</mat-option>
+      <mat-form-field appearance="outline">
+        <mat-label>Roles</mat-label>
+        <mat-select #roleSelect multiple [(ngModel)]="editedUser!.role" name="role" id="role">
+          <ng-container *ngFor="let type of ROLE_KEYS">
+            <mat-option [value]="ROLES[type]">{{ ROLES[type] }}</mat-option>
           </ng-container>
-          
         </mat-select>
       </mat-form-field>
     </div>

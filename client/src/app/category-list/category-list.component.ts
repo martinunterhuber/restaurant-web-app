@@ -30,24 +30,25 @@ export class CategoryListComponent {
     this.isAdd = false;
   }
 
-  public saveCategory(category: Category, oldName: string) {
-    if (category.name != oldName && this.listService.getCategoryByName(category.name) !== undefined) {
-      this.errorMessage = "Duplicate category name!"
-    } else if (oldName == "") {
+  public saveCategory(category: Category) {
+    // if (category.name != oldName && this.listService.getCategoryByName(category.name) !== undefined) {
+    //   this.errorMessage = "Duplicate category name!"
+    // } else 
+    if (category.categoryId == 0) {
       this.errorMessage = "";
       this.listService.addCategory(category);
       this.cancelAdd();
     } else {
       this.errorMessage = "";
-      this.listService.updateCategory(category, oldName);
+      this.listService.updateCategory(category);
     }
   }
 
-  public deleteCategory(name: string) {
-    this.listService.deleteCategory(name);
+  public deleteCategory(id: number) {
+    this.listService.deleteCategory(id);
   }
 
   public createCategory(): Category {
-    return {'name': '', 'type': CategoryType.food}
+    return {"categoryId": 0, "name": "", "type": CategoryType.food}
   }
 }

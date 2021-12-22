@@ -20,14 +20,24 @@ import { CategoryListComponent } from './category-list/category-list.component';
 import { CategoryDetailComponent } from './category-detail/category-detail.component';
 import { CategoryListService } from './category-list.service';
 import { MatSelectModule } from '@angular/material/select';
+import { MenuItemListComponent } from './menu-item-list/menu-item-list.component';
+import { MenuItemDetailComponent } from './menu-item-detail/menu-item-detail.component';
+import { UserListComponent } from './user-list/user-list.component';
+import { UserDetailComponent } from './user-detail/user-detail.component';
+import { MenuItemListService } from './menu-item-list.service';
+import { UserListService } from './user-list.service';
 
 @NgModule({
-  declarations: [				
+  declarations: [								
     AppComponent,
       TableListComponent,
       TableDetailComponent,
       CategoryListComponent,
-      CategoryDetailComponent
+      CategoryDetailComponent,
+      MenuItemListComponent,
+      MenuItemDetailComponent,
+      UserListComponent,
+      UserDetailComponent
    ],
   imports: [
     RouterModule.forRoot(ROUTES, { useHash: true }),
@@ -41,9 +51,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatInputModule,
     MatIconModule,
     MatCardModule,
-    MatSelectModule
+    MatSelectModule   
   ],
-  providers: [TableListService, CategoryListService],
+  providers: [TableListService, CategoryListService, MenuItemListService, UserListService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

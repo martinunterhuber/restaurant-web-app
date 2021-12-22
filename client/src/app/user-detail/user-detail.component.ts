@@ -1,19 +1,19 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Category, CategoryType } from '../models/category';
+import { User, UserRole } from '../models/user';
 
 @Component({
-  selector: 'app-category-detail',
-  templateUrl: './category-detail.component.html',
-  styleUrls: ['./category-detail.component.css']
+  selector: 'app-user-detail',
+  templateUrl: './user-detail.component.html',
+  styleUrls: ['./user-detail.component.css']
 })
-export class CategoryDetailComponent implements OnInit {
-  readonly TYPES = CategoryType;
-  readonly TYPE_KEYS = Object.values(CategoryType);
+export class UserDetailComponent implements OnInit {
+  readonly ROLES = UserRole;
+  readonly ROLE_KEYS = Object.values(UserRole);
 
   @Input()
-  category!: Category;
+  user!: User;
   
-  editedCategory: Category | undefined;
+  editedUser: User | undefined;
 
   @Output()
   cancelEvent = new EventEmitter<void>()
@@ -22,7 +22,7 @@ export class CategoryDetailComponent implements OnInit {
   deleteEvent = new EventEmitter<number>()
 
   @Output()
-  saveEvent = new EventEmitter<Category>()
+  saveEvent = new EventEmitter<User>()
   
   isDelete = false;
   isEdit = false;
@@ -34,7 +34,7 @@ export class CategoryDetailComponent implements OnInit {
   errorMessage = "";
 
   ngOnInit(): void {
-    if (this.category.categoryId == 0) {
+    if (this.user.userId == 0) {
       this.isNew = true;
       this.edit();
     }
@@ -45,7 +45,7 @@ export class CategoryDetailComponent implements OnInit {
   }
 
   public confirmDelete() {
-    this.deleteEvent.emit(this.category.categoryId);
+    this.deleteEvent.emit(this.user.userId);
   }
 
   public cancelDelete() {
@@ -53,16 +53,17 @@ export class CategoryDetailComponent implements OnInit {
   }
 
   public edit() {
-    this.editedCategory = {...this.category};
+    this.editedUser = {...this.user};
     this.isEdit = true;
   }
 
   public save() {
-    if (this.editedCategory!.name == ''){
-      this.errorMessage = "Category name can not be empty!";
+    // TODO: handle password change
+    if (this.editedUser!.name == ''){
+      this.errorMessage = "User name can not be empty!";
     } else {
       this.errorMessage = "";
-      this.saveEvent.emit(this.editedCategory!);
+      this.saveEvent.emit(this.editedUser!);
     }
   }
 

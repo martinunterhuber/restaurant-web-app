@@ -1,0 +1,18 @@
+<div class="list-grid">
+  <app-menu-item-detail 
+    *ngFor="let menuItem of menuItemList" 
+    [menuItem]="menuItem"
+    (saveEvent)="saveMenuItem($event)"
+    (deleteEvent)="deleteMenuItem($event)"
+    [listErrorMessage]="errorMessage"
+    ></app-menu-item-detail>
+</div>
+<button *ngIf="!isAdd" (click)="add()" mat-raised-button color="primary"><mat-icon>add</mat-icon> Add New Menu Item</button>
+<app-menu-item-detail 
+  *ngIf="isAdd" 
+  (cancelEvent)="cancelAdd()" 
+  (saveEvent)="saveMenuItem($event)"
+  (deleteEvent)="deleteMenuItem($event)"
+  [menuItem]="createMenuItem()"
+  [listErrorMessage]="errorMessage"
+  ></app-menu-item-detail>

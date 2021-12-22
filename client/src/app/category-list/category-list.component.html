@@ -2,7 +2,7 @@
   <app-category-detail 
     *ngFor="let category of categoryList" 
     [category]="category"
-    (saveEvent)="saveCategory($event.category, $event.oldName)"
+    (saveEvent)="saveCategory($event)"
     (deleteEvent)="deleteCategory($event)"
     [listErrorMessage]="errorMessage"
     ></app-category-detail>
@@ -11,7 +11,7 @@
 <app-category-detail 
   *ngIf="isAdd" 
   (cancelEvent)="cancelAdd()" 
-  (saveEvent)="saveCategory($event.category, $event.oldName)"
+  (saveEvent)="saveCategory($event)"
   (deleteEvent)="deleteCategory($event)"
   [category]="createCategory()"
   [listErrorMessage]="errorMessage"

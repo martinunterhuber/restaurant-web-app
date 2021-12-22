@@ -1,0 +1,77 @@
+<mat-card *ngIf="menuItem" style="margin: 1rem;">
+  <h2 *ngIf="menuItem.title">{{ menuItem.title }}</h2>
+  <h2 *ngIf="!menuItem.title">New Menu Item</h2>
+  <div *ngIf="!isEdit">
+    <table>
+      <tbody>
+        <tr><td>ID </td> <td>{{ menuItem.itemId }}</td></tr>
+        <tr><td>Title </td> <td>{{ menuItem.title }}</td></tr>
+        <tr><td>Description </td> <td>{{ menuItem.desc }}</td></tr>
+        <tr><td>Price </td> <td>{{ menuItem.price }}</td></tr>
+        <tr><td>Categories </td> <td>{{ menuItem.category }}</td></tr>
+        <tr><td>Allergens </td> <td>{{ menuItem.allergens }}</td></tr>
+        <tr><td>Status </td> <td>{{ menuItem.status }}</td></tr>
+      </tbody>
+    </table>
+    <button *ngIf="!isDelete && !isNew" mat-raised-button color="primary" (click)="edit()"><mat-icon>edit</mat-icon> Edit</button>
+    <button *ngIf="!isDelete && !isNew" (click)="tryDelete()" mat-raised-button color="warn"><mat-icon>delete</mat-icon> Delete</button>
+
+    <div *ngIf="isDelete" style="margin-top: 1rem;">
+      <div>Do you really want to delete this Menu Item?</div>
+      <button mat-raised-button (click)="cancelDelete()" color="primary">No</button>
+      <button mat-raised-button (click)="confirmDelete()" color="warn">Yes</button>
+    </div>
+  </div>
+  <form *ngIf="isEdit">
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput type="text" id="title" name="title" [(ngModel)]="editedMenuItem!.title">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput id="desc" name="desc" [(ngModel)]="editedMenuItem!.desc"></textarea>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Price</mat-label>
+        <input matInput type="number" id="price" name="price" [(ngModel)]="editedMenuItem!.price">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Categories</mat-label>
+        <mat-select #categorySelect multiple [(ngModel)]="editedMenuItem!.category" name="category" id="category">
+          <ng-container *ngFor="let category of getCategoryList()">
+            <mat-option [value]="category.categoryId">{{ category.name }}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Allergens</mat-label>
+        <mat-select #allergenSelect multiple [(ngModel)]="editedMenuItem!.allergens" name="allergens" id="allergens">
+          <ng-container *ngFor="let allergen of ALLERGEN_KEYS">
+            <mat-option [value]="allergen">{{ allergen }} - {{ getAllergen(allergen) }}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <input matInput type="text" id="status" name="status" [(ngModel)]="editedMenuItem!.status">
+      </mat-form-field>
+    </div>
+    <button mat-raised-button color="primary" (click)="save()"><mat-icon>save</mat-icon> Save</button>
+    <button mat-raised-button color="warn" (click)="cancel()"><mat-icon>cancel</mat-icon> Cancel</button>
+    <div *ngIf="errorMessage || listErrorMessage" class="error">
+      {{ errorMessage }}
+      {{ listErrorMessage }}
+    </div>
+  </form>
+</mat-card>
