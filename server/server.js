@@ -36,6 +36,38 @@ app.get("/tables", async (req, res) => {
   }
 });
 
+app.delete("/tables/:id", async(req,res)=>{
+  let id = req.params.id;
+  try {
+		let results = await pool.query({ text: `SELECT * from tables where id=$1`, values: [id] });
+		
+		let resultRows = results.rows;
+
+		if (resultRows.length < 1) {
+			res.status(404).json({
+				"message": "no table with id "+id+" found."
+			});
+			return;
+		}
+		
+	
+		let deletion = await pool.query({ text: `DELETE from tables where id=$1`, values: [id] });
+		
+		res.status(200).json({
+				"message": "table deleted successfully",
+          
+		});
+		return;
+	}
+    catch(error) {
+            res.status(400).json({
+                "message": "error occurred"
+            });
+            console.log(error.stack);
+            return;
+    }
+})
+
 app.get("/categories", async (req, res) => {
   try {
     let query = 'SELECT * FROM categories;';
@@ -50,6 +82,38 @@ app.get("/categories", async (req, res) => {
     return;
   }
 });
+
+app.delete("/categories/:id", async(req,res)=>{
+  let id = req.params.id;
+  try {
+		let results = await pool.query({ text: `SELECT * from categories where id=$1`, values: [id] });
+		
+		let resultRows = results.rows;
+
+		if (resultRows.length < 1) {
+			res.status(404).json({
+				"message": "no categorie with id "+id+" found."
+			});
+			return;
+		}
+		
+	
+		let deletion = await pool.query({ text: `DELETE from categories where id=$1`, values: [id] });
+		
+		res.status(200).json({
+				"message": "categorie deleted successfully",
+          
+		});
+		return;
+	}
+    catch(error) {
+            res.status(400).json({
+                "message": "error occurred"
+            });
+            console.log(error.stack);
+            return;
+    }
+})
 
 app.get("/menuitems", async (req, res) => {
   try {
@@ -72,6 +136,38 @@ app.get("/menuitems", async (req, res) => {
   }
 });
 
+app.delete("/menuitems/:id", async(req,res)=>{
+  let id = req.params.id;
+  try {
+		let results = await pool.query({ text: `SELECT * from menuitem where id=$1`, values: [id] });
+		
+		let resultRows = results.rows;
+
+		if (resultRows.length < 1) {
+			res.status(404).json({
+				"message": "no menu with id "+id+" found."
+			});
+			return;
+		}
+		
+	
+		let deletion = await pool.query({ text: `DELETE from menuitem where id=$1`, values: [id] });
+		
+		res.status(200).json({
+				"message": "menu deleted successfully",
+          
+		});
+		return;
+	}
+    catch(error) {
+            res.status(400).json({
+                "message": "error occurred"
+            });
+            console.log(error.stack);
+            return;
+    }
+})
+
 app.get("/users", async (req, res) => {
   try {
     let query = 'Select u.id, to_json(u.role) as role, u.name, u.password from users AS u;';
@@ -86,6 +182,38 @@ app.get("/users", async (req, res) => {
     return;
   }
 });
+
+app.delete("/users/:id", async(req,res)=>{
+  let id = req.params.id;
+  try {
+		let results = await pool.query({ text: `SELECT * from users where id=$1`, values: [id] });
+		
+		let resultRows = results.rows;
+
+		if (resultRows.length < 1) {
+			res.status(404).json({
+				"message": "no user with id "+id+" found."
+			});
+			return;
+		}
+		
+	
+		let deletion = await pool.query({ text: `DELETE from users where id=$1`, values: [id] });
+		
+		res.status(200).json({
+				"message": "user deleted successfully",
+          
+		});
+		return;
+	}
+    catch(error) {
+            res.status(400).json({
+                "message": "error occurred"
+            });
+            console.log(error.stack);
+            return;
+    }
+})
 
 app.get("/testAuth", checkAuth, (req, res) => {
   res.status(200).send("Auth successfull");

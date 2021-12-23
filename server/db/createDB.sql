@@ -99,8 +99,8 @@ VALUES
 
 CREATE TABLE public.menuInCategorie(
    menu_id INTEGER REFERENCES public.menuItem(id) ON UPDATE CASCADE ON DELETE CASCADE,
-   categorie_id INTEGER REFERENCES public.categories(id) ON UPDATE CASCADE,
-   CONSTRAINT pkey PRIMARY KEY(menu_id, categorie_id)
+   categorie_id INTEGER REFERENCES public.categories(id) ON UPDATE CASCADE ON DELETE CASCADE,
+   CONSTRAINT pkey PRIMARY KEY(menu_id, categorie_id) 
 );
 
 ALTER TABLE public.menuInCategorie OWNER TO postgres;
