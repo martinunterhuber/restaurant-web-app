@@ -1,9 +1,11 @@
 <mat-toolbar>
-  <a mat-button href="" routerLink="/tables">Table List</a>
-  <a mat-button href="" routerLink="/categories">Category List</a>
-  <a mat-button href="" routerLink="/menu-items">Menu Item List</a>
-  <a mat-button href="" routerLink="/users">User List</a>
-  <span class="example-spacer"></span>
+  <a *ngIf="hasRole('Backoffice')" mat-button href="" routerLink="/tables">Table List</a>
+  <a *ngIf="hasRole('Backoffice')" mat-button href="" routerLink="/categories">Category List</a>
+  <a *ngIf="hasRole('Backoffice')" mat-button href="" routerLink="/menu-items">Menu Item List</a>
+  <a *ngIf="hasRole('Backoffice')" mat-button href="" routerLink="/users">User List</a>
+  <span class="spacer"></span>
+  <a *ngIf="!isLoggedIn()" mat-button href="" routerLink="/login">Login</a>
+  <a *ngIf="isLoggedIn()" mat-button href="" routerLink="/logout">Logout</a>
 </mat-toolbar>
 <div style="margin: 1rem;">
   <router-outlet></router-outlet>

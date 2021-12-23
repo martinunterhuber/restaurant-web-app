@@ -26,6 +26,11 @@ import { UserListComponent } from './user-list/user-list.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { MenuItemListService } from './menu-item-list.service';
 import { UserListService } from './user-list.service';
+import { AuthenticationService } from './authentication.service';
+import { LoginComponent } from './login/login.component';
+import { HttpClient, HttpClientModule, HttpHandler, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { LogoutComponent } from './logout/logout.component';
+import { JWTHttpInterceptor } from './jwt-http.interceptor';
 
 @NgModule({
   declarations: [								
@@ -37,12 +42,15 @@ import { UserListService } from './user-list.service';
       MenuItemListComponent,
       MenuItemDetailComponent,
       UserListComponent,
-      UserDetailComponent
+      UserDetailComponent,
+      LoginComponent,
+      LogoutComponent
    ],
   imports: [
     RouterModule.forRoot(ROUTES, { useHash: true }),
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     FormsModule,
     MatTableModule,
     MatToolbarModule,
@@ -53,7 +61,14 @@ import { UserListService } from './user-list.service';
     MatCardModule,
     MatSelectModule   
   ],
-  providers: [TableListService, CategoryListService, MenuItemListService, UserListService],
+  providers: [
+    TableListService, 
+    CategoryListService, 
+    MenuItemListService, 
+    UserListService, 
+    AuthenticationService, 
+    { provide: HTTP_INTERCEPTORS, useClass: JWTHttpInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
