@@ -42,6 +42,7 @@ app.post("/tables", async (req, res) => {
     return;
   }
   try {
+    console.log();
     let table = req.body;
 
     if (table.id === undefined || table.id === "") {
@@ -90,6 +91,63 @@ app.post("/tables", async (req, res) => {
   }
 });
 
+app.put("/tables/:id", async (req, res) => {
+  let id = req.params.id;
+
+  if (req.body == null) {
+    res.status(400).json({
+      message: "body is empty",
+    });
+    return;
+  }
+
+  try {
+    let results = await pool.query({
+      text: `SELECT * from tables where id=$1`,
+      values: [id],
+    });
+
+    let resultRows = results.rows;
+
+    if (resultRows.length < 1) {
+      res.status(404).json({
+        message: "table with id=" + id + " not found",
+      });
+      return;
+    }
+
+    let current = resultRows[0];
+
+    let newId = req.body.id != null ? req.body.id : current.id;
+    let capacity =
+      req.body.capacity != null ? req.body.capacity : current.capacity;
+    let description =
+      req.body.description != null ? req.body.description : current.description;
+
+    results = await pool.query({
+      text: `UPDATE tables SET id=$1, capacity=$2, description=$3 WHERE id=$4`,
+      values: [newId, capacity, description, id],
+    });
+
+    if (results.rowCount < 1) {
+      res.status(404).json({
+        message: "no changes were applied",
+      });
+      return;
+    }
+    res.status(200).json({
+      message: "update successful",
+    });
+    return;
+  } catch (error) {
+    res.status(400).json({
+      message: "error occurred",
+    });
+    console.log(error.stack);
+    return;
+  }
+});
+
 app.delete("/tables/:id", async (req, res) => {
   let id = req.params.id;
   try {
@@ -131,6 +189,61 @@ app.get("/categories", async (req, res) => {
 
     let result = await pool.query(query);
     res.status(200).json(result.rows);
+  } catch (error) {
+    res.status(400).json({
+      message: "error occurred",
+    });
+    console.log(error.stack);
+    return;
+  }
+});
+
+app.put("/categories/:id", async (req, res) => {
+  let id = req.params.id;
+
+  if (req.body == null) {
+    res.status(400).json({
+      message: "body is empty",
+    });
+    return;
+  }
+
+  try {
+    let results = await pool.query({
+      text: `SELECT * from categories where id=$1`,
+      values: [id],
+    });
+
+    let resultRows = results.rows;
+
+    if (resultRows.length < 1) {
+      res.status(404).json({
+        message: "category with id=" + id + " not found",
+      });
+      return;
+    }
+
+    let current = resultRows[0];
+
+    let newId = req.body.id != null ? req.body.id : current.id;
+    let name = req.body.name != null ? req.body.name : current.name;
+    let type = req.body.type != null ? req.body.type : current.type;
+
+    results = await pool.query({
+      text: `UPDATE categories SET id=$1, name=$2, type=$3 WHERE id=$4`,
+      values: [newId, name, type, id],
+    });
+
+    if (results.rowCount < 1) {
+      res.status(404).json({
+        message: "no changes were applied",
+      });
+      return;
+    }
+    res.status(200).json({
+      message: "update successful",
+    });
+    return;
   } catch (error) {
     res.status(400).json({
       message: "error occurred",
@@ -258,7 +371,103 @@ app.get("/menuitems", async (req, res) => {
   }
 });
 
-let allergens = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'L', 'M', 'N', 'O', 'P', 'R'];
+app.put("/menuitems/:id", async (req, res) => {
+  let id = req.params.id;
+
+  if (req.body == null) {
+    res.status(400).json({
+      message: "body is empty",
+    });
+    return;
+  }
+
+  try {
+    let results = await pool.query({
+      text: `SELECT * from menuitem where id=$1`,
+      values: [id],
+    });
+
+    let resultRows = results.rows;
+
+    if (resultRows.length < 1) {
+      res.status(404).json({
+        message: "menu-item with id=" + id + " not found",
+      });
+      return;
+    }
+
+    let current = resultRows[0];
+
+    let newId = req.body.id != null ? req.body.id : current.id;
+    let title = req.body.title != null ? req.body.title : current.title;
+    let description =
+      req.body.description != null ? req.body.description : current.description;
+    let price = req.body.price != null ? req.body.price : current.price;
+    let allergens =
+      req.body.allergens != null ? req.body.allergens : current.allergens;
+    let status = req.body.status != null ? req.body.status : current.status;
+
+    results = await pool.query({
+      text: `UPDATE menuitem SET id=$1, title=$2, description=$3, price=$4, allergens=$5, status=$6 WHERE id=$7 ;`,
+      values: [newId, title, description, price, allergens, status, id],
+    });
+
+    changesApplied = results.rowCount >= 1;
+    if (!changesApplied) {
+      res.status(404).json({
+        message: "no changes were applied",
+      });
+      return;
+    }
+
+    logForCategories = "";
+    if (changesApplied && req.body.categories != null) {
+      await pool.query({
+        text: "DELETE FROM menuInCategorie m WHERE m.menu_id=$1",
+        values: [newId]})
+      let categories = req.body.categories;
+      for (let category of categories) {
+        try {
+          await pool.query({
+            text: "INSERT INTO menuInCategorie(menu_id, categorie_id) VALUES($1, $2);",
+            values: [newId, category],
+          });
+        } catch (error) {
+          console.log(error);
+          logForCategories +=
+            "Something went wrong with categorie: " + category + "\n";
+        }
+      }
+    }
+    res.status(200).json({
+      message: "update successful",
+    });
+    return;
+  } catch (error) {
+    res.status(400).json({
+      message: "error occurred",
+    });
+    console.log(error.stack);
+    return;
+  }
+});
+
+let allergens = [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "L",
+  "M",
+  "N",
+  "O",
+  "P",
+  "R",
+];
 app.post("/menuitems", async (req, res) => {
   if (req.body === undefined) {
     res.status(400).json({ message: "body is empty" });
@@ -267,7 +476,7 @@ app.post("/menuitems", async (req, res) => {
   try {
     let item = req.body;
 
-    if (item.id===undefined) {
+    if (item.id === undefined) {
       res.status(400).json({
         message: "id must be specified",
       });
@@ -281,32 +490,56 @@ app.post("/menuitems", async (req, res) => {
 
     if (resultId.rows.length > 0) {
       res.status(400).json({
-        message: "menuitem with id=" + user.id + " already exists",
+        message: "menuitem with id=" + item.id + " already exists",
       });
       return;
     }
 
-    if(item.title === undefined)item.title = "newMenuItem";
-    if(item.description === undefined) item.description = "Description";
-    if(item.price === undefined) item.price = 0.00;
-    if(item.status === undefined) item.status = "not available";
-    if(item.allergens === undefined) item.allergens = ["A"];
-    
+    if (item.title === undefined) item.title = "newMenuItem";
+    if (item.description === undefined) item.description = "Description";
+    if (item.price === undefined) item.price = 0.0;
+    if (item.status === undefined) item.status = "not available";
+    if (item.allergens === undefined) item.allergens = ["A"];
 
     let creation = await pool.query({
-      text: `INSERT INTO menuitem (id,title,description, price, allergens, status) VALUES($1,$2,$3,$4,$5,$6)`,
-      values: [item.id, item.title, item.description, item.price, item.allergens, item.status],
+      text: `INSERT INTO menuitem (id,title,description, price, allergens, status) VALUES($1,$2,$3,$4,$5,$6);`,
+      values: [
+        item.id,
+        item.title,
+        item.description,
+        item.price,
+        item.allergens,
+        item.status,
+      ],
     });
 
-    if (creation.rowCount < 1) {
+    itemCreated = creation.rowCount >= 1;
+
+    if (!itemCreated) {
       res.status(404).json({
         message: "no menu item created",
       });
       return;
     }
 
+    logForCategories = "";
+    if (itemCreated && item.categories !== undefined) {
+      for (let category of item.categories) {
+        try {
+          await pool.query({
+            text: "INSERT INTO menuInCategorie(menu_id, categorie_id) VALUES($1, $2);",
+            values: [item.id, category],
+          });
+        } catch (error) {
+          console.log(error);
+          logForCategories +=
+            "Something went wrong with categorie: " + category + "\n";
+        }
+      }
+    }
+
     res.status(201).json({
-      message: "menu item created successfully",
+      message: "menu item created successfully\n" + logForCategories,
     });
     return;
   } catch (error) {
@@ -445,6 +678,63 @@ app.post("/users", async (req, res) => {
     return;
   } catch (error) {
     res.status(400).json({ message: "error occured" });
+    console.log(error.stack);
+    return;
+  }
+});
+
+app.put("/users/:id", async (req, res) => {
+  let id = req.params.id;
+
+  if (req.body == null) {
+    res.status(400).json({
+      message: "body is empty",
+    });
+    return;
+  }
+
+  try {
+    let results = await pool.query({
+      text: `SELECT * from users where id=$1`,
+      values: [id],
+    });
+
+    let resultRows = results.rows;
+
+    if (resultRows.length < 1) {
+      res.status(404).json({
+        message: "user with id=" + id + " not found",
+      });
+      return;
+    }
+
+    let current = resultRows[0];
+
+    let newId = req.body.id != null ? req.body.id : current.id;
+    let role = req.body.role != null ? req.body.role : current.role;
+    let name = req.body.name != null ? req.body.name : current.name;
+    let password =
+      req.body.password != null ? req.body.password : current.password;
+
+    results = await pool.query({
+      text: `UPDATE users SET id=$1, role=$2, name=$3, password=$4 WHERE id=$5`,
+      values: [newId, role, name, password, id],
+    });
+
+    if (results.rowCount < 1) {
+      res.status(404).json({
+        message: "no changes were applied",
+      });
+      return;
+    }
+    res.status(200).json({
+      message: "update successful",
+    });
+    return;
+  } catch (error) {
+    res.status(400).json({
+      message: "error occurred",
+    });
     console.log(error.stack);
     return;
   }
