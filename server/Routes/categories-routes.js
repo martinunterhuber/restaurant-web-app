@@ -74,16 +74,15 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-let types = ["food", "special", "beverage"];
 router.post("/", async (req, res) => {
-  if (req.body === undefined) {
+  if (req.body == null) {
     res.status(400).json({ message: "body is empty" });
     return;
   }
   try {
     let category = req.body;
 
-    if (category.id === undefined || category.id === "") {
+    if (category.id == null || category.id === "") {
       res.status(400).json({
         message: "id must be specified",
       });
@@ -102,16 +101,8 @@ router.post("/", async (req, res) => {
       return;
     }
 
-    if (category.name === undefined) category.name = "newCategory";
-    if (category.type === undefined) category.type = "special";
-    else {
-      if (!types.includes(category.type)) {
-        res.status(400).json({
-          message: "type has to be food, beverage or special",
-        });
-        return;
-      }
-    }
+    if (category.name == null) category.name = "newCategory";
+    if (category.type == null) category.type = "special";
 
     let creation = await pool.query({
       text: `INSERT INTO categories (id,name,type) VALUES($1,$2,$3)`,

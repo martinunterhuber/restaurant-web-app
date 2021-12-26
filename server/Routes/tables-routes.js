@@ -20,15 +20,14 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  if (req.body === undefined) {
+  if (req.body == null) {
     res.status(400).json({ message: "body is empty" });
     return;
   }
   try {
-    
     let table = req.body;
 
-    if (table.id === undefined || table.id === "") {
+    if (table.id == null || table.id === "") {
       res.status(400).json({
         message: "id must be specified",
       });
@@ -44,13 +43,13 @@ router.post("/", async (req, res) => {
 
     if (resultIdRows.length > 0) {
       res.status(400).json({
-        message: "object with id=" + table.id + " already exists",
+        message: "table with id=" + table.id + " already exists",
       });
       return;
     }
 
-    if (table.description === undefined) table.description = "";
-    if (table.capacity === undefined) table.capacity = 0;
+    if (table.description == null) table.description = "";
+    if (table.capacity == null) table.capacity = 0;
 
     let creation = await pool.query({
       text: `INSERT INTO tables (id,capacity,description) VALUES($1,$2,$3)`,

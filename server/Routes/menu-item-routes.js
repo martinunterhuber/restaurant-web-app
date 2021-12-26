@@ -7,12 +7,11 @@ const pool = require("../pool.js");
 router.get("/", async (req, res) => {
   try {
     let query =
-      "SELECT m.id, m.title, m.description, m.price, to_json(m.allergens) as allergens, m.status, array_agg(c.name) AS categories " +
+      "SELECT m.id, m.title, m.description, m.price, to_json(m.allergens) as allergens, m.status, array_agg(c.id) AS categories " +
       "FROM menuitem m LEFT JOIN menuincategorie e ON m.id = e.menu_id LEFT JOIN  categories c ON e.categorie_id = c.id " +
       "GROUP BY m.id ORDER BY m.id;";
 
     let result = await pool.query(query);
-    m = result.rows[0].allergens;
     res.status(200).json(result.rows);
   } catch (error) {
     res.status(400).json({
@@ -105,31 +104,16 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-let allergens = [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "L",
-  "M",
-  "N",
-  "O",
-  "P",
-  "R",
-];
 router.post("/", async (req, res) => {
-  if (req.body === undefined) {
+  if (req.body == null) {
     res.status(400).json({ message: "body is empty" });
     return;
   }
+
   try {
     let item = req.body;
 
-    if (item.id === undefined) {
+    if (item.id == null) {
       res.status(400).json({
         message: "id must be specified",
       });
@@ -148,11 +132,11 @@ router.post("/", async (req, res) => {
       return;
     }
 
-    if (item.title === undefined) item.title = "newMenuItem";
-    if (item.description === undefined) item.description = "Description";
-    if (item.price === undefined) item.price = 0.0;
-    if (item.status === undefined) item.status = "not available";
-    if (item.allergens === undefined) item.allergens = ["A"];
+    if (item.title == null) item.title = "newMenuItem";
+    if (item.description == null) item.description = "Description";
+    if (item.price == null) item.price = 0.0;
+    if (item.status == null) item.status = "not available";
+    if (item.allergens == null) item.allergens = ["A"];
 
     let creation = await pool.query({
       text: `INSERT INTO menuitem (id,title,description, price, allergens, status) VALUES($1,$2,$3,$4,$5,$6);`,
@@ -176,7 +160,7 @@ router.post("/", async (req, res) => {
     }
 
     logForCategories = "";
-    if (itemCreated && item.categories !== undefined) {
+    if (item.categories != null) {
       for (let category of item.categories) {
         try {
           await pool.query({
@@ -185,14 +169,13 @@ router.post("/", async (req, res) => {
           });
         } catch (error) {
           console.log(error);
-          logForCategories +=
-            "Something went wrong with categorie: " + category + "\n";
+          logForCategories += " issue adding categorie: " + category + ".";
         }
       }
     }
 
     res.status(201).json({
-      message: "menu item created successfully\n" + logForCategories,
+      message: "menu item created successfully." + logForCategories,
     });
     return;
   } catch (error) {

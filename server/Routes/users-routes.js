@@ -6,8 +6,8 @@ const pool = require("../pool.js");
 
 router.get("/", async (req, res) => {
   try {
-    let query =
-      "Select u.id, to_json(u.role) as role, u.name, u.password from users AS u;";
+
+    let query = "Select u.id, to_json(u.role) as role, u.name, u.password from users AS u;";
 
     let result = await pool.query(query);
     res.status(200).json(result.rows);
@@ -20,38 +20,24 @@ router.get("/", async (req, res) => {
   }
 });
 
-let roles = ["Waiter", "Kitchen", "Backoffice"];
 router.post("/", async (req, res) => {
-  if (req.body === undefined) {
+  if (req.body == null) {
     res.status(400).json({ message: "body is empty" });
     return;
   }
   try {
     let user = req.body;
 
-    if (
-      user.id === undefined ||
-      user.id === "" ||
-      user.name === undefined ||
-      user.name === "" ||
-      user.role === undefined ||
-      user.password === undefined ||
-      user.password === " "
-    ) {
+    if (user.id == null || user.id === "") {
       res.status(400).json({
-        message: "id, name, role and password must be specified",
+        message: "id  must be specified",
       });
       return;
     }
 
-    for (let role of user.role) {
-      if (!roles.includes(role)) {
-        res
-          .status(400)
-          .json({ message: "roles have to be Waiter, Kitchen or Backoffice" });
-        return;
-      }
-    }
+    if (user.name == null) user.name = "newUser";
+    if (user.role == null) user.role = ["Kitchen"];
+    if (user.password == null) user.password = "123";
 
     let resultId = await pool.query({
       text: `SELECT id FROM users where id=$1`,

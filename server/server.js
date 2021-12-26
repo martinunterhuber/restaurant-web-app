@@ -11,22 +11,22 @@ const pool = require("./pool.js");
 let bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
-const checkAuth = require("./check_auth");
+const checkAuth = require("./Routes/check_auth");
 
-const loginRoutes = require("./login");
+const loginRoutes = require("./Routes/login");
 app.use("/login", loginRoutes);
 
 const tableRoutes = require("./Routes/tables-routes");
-app.use("/tables", tableRoutes);
+app.use("/tables", checkAuth, tableRoutes);
 
 const categoryRoutes = require("./Routes/categories-routes");
-app.use("/categories", categoryRoutes);
+app.use("/categories", checkAuth, categoryRoutes);
 
 const userRoutes = require("./Routes/users-routes");
-app.use("/users", userRoutes);
+app.use("/users", checkAuth, userRoutes);
 
 const menuItemRoutes = require("./Routes/menu-item-routes");
-app.use("/menuitems", menuItemRoutes);
+app.use("/menuitems", checkAuth, menuItemRoutes);
 
 app.get("/", (req, res) => {
   res.setHeader("Content-Type", "application/json");
