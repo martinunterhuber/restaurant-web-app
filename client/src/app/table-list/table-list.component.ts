@@ -38,15 +38,17 @@ export class TableListComponent {
     if (oldId == 0) {
       this.errorMessage = "";
       this.listService.addTable(table).subscribe({
-        next: (message) => this.refresh(),
+        next: (message) => {
+          this.cancelAdd();
+          this.refresh();
+        },
         error: (error) => this.errorMessage = error.error.message
       });
-      this.cancelAdd();
     } else {
       this.errorMessage = "";
       this.listService.updateTable(table, oldId).subscribe({
         next: (message) => this.refresh(),
-        error: (error) => this.errorMessage = error.error.message
+        error: (error) => this.errorMessage = `table with id=${table.id} already exists`
       });
     }
   }

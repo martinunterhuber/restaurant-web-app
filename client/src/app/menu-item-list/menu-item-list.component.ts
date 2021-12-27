@@ -44,10 +44,12 @@ export class MenuItemListComponent {
     if (menuItem.id == 0) {
       this.errorMessage = "";
       this.listService.addMenuItem(menuItem).subscribe({
-        next: (message) => this.refresh(),
+        next: (message) => {
+          this.cancelAdd();
+          this.refresh();
+        },
         error: (error) => this.errorMessage = error.error.message
       });
-      this.cancelAdd();
     } else {
       this.errorMessage = "";
       this.listService.updateMenuItem(menuItem).subscribe({
