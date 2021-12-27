@@ -9,10 +9,10 @@ import { UserListComponent } from "./user-list/user-list.component";
 
 
 export const ROUTES: Routes = [ 
-    { path: 'tables', component: TableListComponent, canActivate: [AuthGuard] }, 
-    { path: 'categories', component: CategoryListComponent, canActivate: [AuthGuard] }, 
-    { path: 'menu-items', component: MenuItemListComponent, canActivate: [AuthGuard] }, 
-    { path: 'users', component: UserListComponent, canActivate: [AuthGuard] }, 
+    { path: 'tables', component: TableListComponent, canActivate: [AuthGuard], data: {roles: ['Backoffice']} }, 
+    { path: 'categories', component: CategoryListComponent, canActivate: [AuthGuard], data: {roles: ['Backoffice']} }, 
+    { path: 'menu-items', component: MenuItemListComponent, canActivate: [AuthGuard], data: {roles: ['Backoffice']} }, 
+    { path: 'users', component: UserListComponent, canActivate: [AuthGuard], data: {roles: ['Backoffice']} }, 
     { path: 'login', component: LoginComponent },
     { path: 'logout', component: LogoutComponent }, 
 ];
