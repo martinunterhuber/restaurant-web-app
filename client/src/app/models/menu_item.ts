@@ -9,7 +9,18 @@ export interface MenuItem {
 }
 
 export enum Allergen {
-    A = "Gluten",
+    A = "Gluten-containing grains",
     B = "Crustaceans",
-
+    C = "Egg",
+    D = "Fish",
+    E = "Peanut",
+    F = "Soy",
+    G = "Milk or lactose",
+    H = "Nuts",
+    L = "Celery",
+    M = "Mustard",
+    N = "Sesame",
+    O = "Sulphites",
+    P = "Lupines",
+    R = "Molluscs",
 }
