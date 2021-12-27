@@ -15,9 +15,12 @@ export class JWTHttpInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError(
         (event: HttpErrorResponse) => {
-          console.log(event);
           if (event.status === 401) {
+            // someone might have changed the JWT so log them out
+            this.authService.logout();
             this.router.navigate(["login"]);
+          } else if (event.status === 403) {
+            this.router.navigate([""]);
           }
           return throwError(() => event);
         }
