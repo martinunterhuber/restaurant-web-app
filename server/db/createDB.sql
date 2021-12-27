@@ -46,7 +46,7 @@ CREATE TYPE public.roles AS ENUM('Backoffice', 'Waiter', 'Kitchen');
 CREATE TABLE public.users(
     id INTEGER PRIMARY KEY,
     role public.roles[] NOT NULL,
-    name character varying(50) NOT NULL,
+    name character varying(50) NOT NULL UNIQUE,
     password character varying(50) NOT NULL
     
 );

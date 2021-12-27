@@ -28,25 +28,32 @@ router.post("/", async (req, res) => {
   try {
     let user = req.body;
 
-    if (user.id == null || user.id === "") {
-      res.status(400).json({
-        message: "id  must be specified",
-      });
-      return;
-    }
-
     if (user.name == null) user.name = "newUser";
     if (user.role == null) user.role = ["Kitchen"];
     if (user.password == null) user.password = "123";
 
-    let resultId = await pool.query({
-      text: `SELECT id FROM users where id=$1`,
-      values: [user.id],
+    if (user.id) {
+      let resultId = await pool.query({
+        text: `SELECT id FROM users where id=$1`,
+        values: [user.id],
+      });
+
+      if (resultId.rows.length > 0) {
+        res.status(400).json({
+          message: "user with id=" + user.id + " already exists",
+        });
+        return;
+      }
+    }
+
+    let resultName = await pool.query({
+      text: `SELECT name FROM users where name=$1`,
+      values: [user.name],
     });
 
-    if (resultId.rows.length > 0) {
+    if (resultName.rows.length > 0) {
       res.status(400).json({
-        message: "user with id=" + user.id + " already exists",
+        message: "user with name=" + user.name + " already exists",
       });
       return;
     }
