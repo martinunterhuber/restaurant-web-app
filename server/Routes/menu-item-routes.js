@@ -113,23 +113,18 @@ router.post("/", async (req, res) => {
   try {
     let item = req.body;
 
-    if (item.id == null) {
-      res.status(400).json({
-        message: "id must be specified",
+    if (item.id) {
+      let resultId = await pool.query({
+        text: `SELECT id FROM menuitem where id=$1`,
+        values: [item.id],
       });
-      return;
-    }
 
-    let resultId = await pool.query({
-      text: `SELECT id FROM menuitem where id=$1`,
-      values: [item.id],
-    });
-
-    if (resultId.rows.length > 0) {
-      res.status(400).json({
-        message: "menuitem with id=" + item.id + " already exists",
-      });
-      return;
+      if (resultId.rows.length > 0) {
+        res.status(400).json({
+          message: "menuitem with id=" + item.id + " already exists",
+        });
+        return;
+      }
     }
 
     if (item.title == null) item.title = "newMenuItem";
@@ -138,16 +133,12 @@ router.post("/", async (req, res) => {
     if (item.status == null) item.status = "not available";
     if (item.allergens == null) item.allergens = ["A"];
 
+    let defaultId = "(SELECT COALESCE(MAX(id), 0) + 1 FROM menuitem)";
+    let values = [item.title, item.description, item.price, item.allergens, item.status];
+    if (item.id) values.push(item.id);
     let creation = await pool.query({
-      text: `INSERT INTO menuitem (id,title,description, price, allergens, status) VALUES($1,$2,$3,$4,$5,$6);`,
-      values: [
-        item.id,
-        item.title,
-        item.description,
-        item.price,
-        item.allergens,
-        item.status,
-      ],
+      text: `INSERT INTO menuitem (id,title,description, price, allergens, status) VALUES(${item.id ? '$6' : defaultId},$1,$2,$3,$4,$5);`,
+      values: values,
     });
 
     itemCreated = creation.rowCount >= 1;

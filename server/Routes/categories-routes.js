@@ -6,7 +6,7 @@ const pool = require("../pool.js");
 
 router.get("/", async (req, res) => {
   try {
-    let query = "SELECT * FROM categories;";
+    let query = "SELECT * FROM categories ORDER BY id;";
 
     let result = await pool.query(query);
     res.status(200).json(result.rows);
@@ -89,24 +89,29 @@ router.post("/", async (req, res) => {
       return;
     }
 
-    let resultId = await pool.query({
-      text: `SELECT id FROM categories where id=$1`,
-      values: [category.id],
-    });
-
-    if (resultId.rows.length > 0) {
-      res.status(400).json({
-        message: "category with id=" + category.id + " already exists",
+    if (category.id) {
+      let resultId = await pool.query({
+        text: `SELECT id FROM categories where id=$1`,
+        values: [category.id],
       });
-      return;
+  
+      if (resultId.rows.length > 0) {
+        res.status(400).json({
+          message: "category with id=" + category.id + " already exists",
+        });
+        return;
+      }
     }
 
     if (category.name == null) category.name = "newCategory";
     if (category.type == null) category.type = "special";
 
+    let defaultId = "(SELECT COALESCE(MAX(id), 0) + 1 FROM categories)";
+    let values = [category.name, category.type];
+    if (category.id) values.push(category.id);
     let creation = await pool.query({
-      text: `INSERT INTO categories (id,name,type) VALUES($1,$2,$3)`,
-      values: [category.id, category.name, category.type],
+      text: `INSERT INTO categories (id,name,type) VALUES(${category.id ? '$3' : defaultId}, $1, $2)`,
+      values: values,
     });
 
     if (creation.rowCount < 1) {

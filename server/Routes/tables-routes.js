@@ -6,7 +6,7 @@ const pool = require("../pool.js");
 
 router.get("/", async (req, res) => {
   try {
-    let query = "SELECT * FROM tables;";
+    let query = "SELECT * FROM tables ORDER BY id;";
 
     let result = await pool.query(query);
     res.status(200).json(result.rows);
@@ -27,34 +27,33 @@ router.post("/", async (req, res) => {
   try {
     let table = req.body;
 
-    if (table.id == null || table.id === "") {
-      res.status(400).json({
-        message: "id must be specified",
+    if (table.id) {
+      let resultId = await pool.query({
+        text: `SELECT id FROM tables where id=$1`,
+        values: [table.id],
       });
-      return;
-    }
 
-    let resultId = await pool.query({
-      text: `SELECT id FROM tables where id=$1`,
-      values: [table.id],
-    });
+      let resultIdRows = resultId.rows;
 
-    let resultIdRows = resultId.rows;
-
-    if (resultIdRows.length > 0) {
-      res.status(400).json({
-        message: "table with id=" + table.id + " already exists",
-      });
-      return;
+      if (resultIdRows.length > 0) {
+        res.status(400).json({
+          message: "table with id=" + table.id + " already exists",
+        });
+        return;
+      }
     }
 
     if (table.description == null) table.description = "";
     if (table.capacity == null) table.capacity = 0;
 
+    let defaultId = "(SELECT COALESCE(MAX(id), 0) + 1 FROM tables)";
+    let values = [table.capacity, table.description];
+    if (table.id) values.push(table.id);
     let creation = await pool.query({
-      text: `INSERT INTO tables (id,capacity,description) VALUES($1,$2,$3)`,
-      values: [table.id, table.capacity, table.description],
+      text: `INSERT INTO tables (id,capacity,description) VALUES(${table.id ? '$3' : defaultId},$1,$2)`,
+      values: values,
     });
+
     if (creation.rowCount < 1) {
       res.status(404).json({
         message: "no table created",

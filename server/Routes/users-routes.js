@@ -7,7 +7,7 @@ const pool = require("../pool.js");
 router.get("/", async (req, res) => {
   try {
 
-    let query = "Select u.id, to_json(u.role) as role, u.name, u.password from users AS u;";
+    let query = "Select u.id, to_json(u.role) as role, u.name, u.password from users AS u ORDER BY id;";
 
     let result = await pool.query(query);
     res.status(200).json(result.rows);
@@ -51,9 +51,12 @@ router.post("/", async (req, res) => {
       return;
     }
 
+    let defaultId = "(SELECT COALESCE(MAX(id), 0) + 1 FROM users)";
+    let values = [user.name, user.role, user.password];
+    if (user.id) values.push(user.id);
     let creation = await pool.query({
-      text: `INSERT INTO users (id,name,role, password) VALUES($1,$2,$3,$4)`,
-      values: [user.id, user.name, user.role, user.password],
+      text: `INSERT INTO users (id,name,role, password) VALUES(${user.id ? '$4' : defaultId},$1,$2,$3)`,
+      values: values,
     });
 
     if (creation.rowCount < 1) {
