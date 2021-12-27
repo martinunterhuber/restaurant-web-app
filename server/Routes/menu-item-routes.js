@@ -137,7 +137,7 @@ router.post("/", async (req, res) => {
     let values = [item.title, item.description, item.price, item.allergens, item.status];
     if (item.id) values.push(item.id);
     let creation = await pool.query({
-      text: `INSERT INTO menuitem (id,title,description, price, allergens, status) VALUES(${item.id ? '$6' : defaultId},$1,$2,$3,$4,$5);`,
+      text: `INSERT INTO menuitem (id,title,description, price, allergens, status) VALUES(${item.id ? '$6' : defaultId},$1,$2,$3,$4,$5) RETURNING id;`,
       values: values,
     });
 
@@ -149,6 +149,8 @@ router.post("/", async (req, res) => {
       });
       return;
     }
+    
+    let newId = creation.rows[0].id;
 
     logForCategories = "";
     if (item.categories != null) {
@@ -156,7 +158,7 @@ router.post("/", async (req, res) => {
         try {
           await pool.query({
             text: "INSERT INTO menuInCategorie(menu_id, categorie_id) VALUES($1, $2);",
-            values: [item.id, category],
+            values: [newId, category],
           });
         } catch (error) {
           console.log(error);
