@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
     });
 
     if (result.rowCount === 0) {
-      res.status(400).send({ message: "no such user" });
+      res.status(400).send({ message: "User or password is incorrect" });
       return;
     }
 

@@ -28,6 +28,8 @@ export class UserDetailComponent implements OnInit {
   isEdit = false;
   isNew = false;
 
+  changePassword = false;
+
   @Input()
   listErrorMessage!: string;
 
@@ -35,6 +37,7 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.user.id == 0) {
+      this.changePassword = true;
       this.isNew = true;
       this.edit();
     }
@@ -63,6 +66,9 @@ export class UserDetailComponent implements OnInit {
       this.errorMessage = "User name can not be empty!";
     } else {
       this.errorMessage = "";
+      if (!this.changePassword) {
+        this.editedUser!.password = "";
+      }
       this.saveEvent.emit(this.editedUser!);
     }
   }

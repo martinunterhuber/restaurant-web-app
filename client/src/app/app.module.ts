@@ -11,7 +11,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input'; 
 import { MatButtonModule } from '@angular/material/button'; 
 import { MatIconModule } from '@angular/material/icon'; 
-import { MatCardModule } from '@angular/material/card'; 
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox'; 
 import { TableDetailComponent } from './table-detail/table-detail.component';
 import { ROUTES } from './app.routes';
 import { RouterModule } from '@angular/router';
@@ -59,7 +60,8 @@ import { JWTHttpInterceptor } from './jwt-http.interceptor';
     MatInputModule,
     MatIconModule,
     MatCardModule,
-    MatSelectModule   
+    MatSelectModule,
+    MatCheckboxModule
   ],
   providers: [
     TableListService, 

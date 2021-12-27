@@ -7,7 +7,7 @@ const pool = require("../pool.js");
 router.get("/", async (req, res) => {
   try {
 
-    let query = "Select u.id, to_json(u.role) as role, u.name, u.password from users AS u ORDER BY id;";
+    let query = "Select u.id, to_json(u.role) as role, u.name, '' as password from users AS u ORDER BY id;";
 
     let result = await pool.query(query);
     res.status(200).json(result.rows);
@@ -108,7 +108,7 @@ router.put("/:id", async (req, res) => {
     let role = req.body.role != null ? req.body.role : current.role;
     let name = req.body.name != null ? req.body.name : current.name;
     let password =
-      req.body.password != null ? req.body.password : current.password;
+      req.body.password != null && req.body.password.trim() !== "" ? req.body.password : current.password;
 
     results = await pool.query({
       text: `UPDATE users SET id=$1, role=$2, name=$3, password=$4 WHERE id=$5`,

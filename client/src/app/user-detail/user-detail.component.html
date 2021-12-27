@@ -26,12 +26,15 @@
         <input matInput type="text" id="name" name="name" [(ngModel)]="editedUser!.name">
       </mat-form-field>
     </div>
-    <!-- <div>
+    <div *ngIf="!isNew">
+      <mat-checkbox style="margin-bottom: 1rem;" id="changePass" name="changePass" [(ngModel)]="changePassword">Change Password?</mat-checkbox>
+    </div>
+    <div *ngIf="changePassword">
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
         <input matInput type="password" id="password" name="password" [(ngModel)]="editedUser!.password">
       </mat-form-field>
-    </div> -->
+    </div>
     <div>
       <mat-form-field appearance="outline">
         <mat-label>Roles</mat-label>
