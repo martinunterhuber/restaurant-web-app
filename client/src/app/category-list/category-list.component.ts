@@ -18,7 +18,10 @@ export class CategoryListComponent {
   }
 
   public refresh() {
-    this.categoryList = this.listService.getCategoryList();
+    this.listService.getCategoryList().subscribe({
+      next: (categoryList: Category[]) => this.categoryList = categoryList,
+      error: (error) => console.log(error)
+    });
   }
 
   public add() {
@@ -31,24 +34,30 @@ export class CategoryListComponent {
   }
 
   public saveCategory(category: Category) {
-    // if (category.name != oldName && this.listService.getCategoryByName(category.name) !== undefined) {
-    //   this.errorMessage = "Duplicate category name!"
-    // } else 
-    if (category.categoryId == 0) {
+    if (category.id == 0) {
       this.errorMessage = "";
-      this.listService.addCategory(category);
+      this.listService.addCategory(category).subscribe({
+        next: (message) => this.refresh(),
+        error: (error) => this.errorMessage = error.error.message
+      });
       this.cancelAdd();
     } else {
       this.errorMessage = "";
-      this.listService.updateCategory(category);
+      this.listService.updateCategory(category).subscribe({
+        next: (message) => this.refresh(),
+        error: (error) => this.errorMessage = error.error.message
+      });
     }
   }
 
   public deleteCategory(id: number) {
-    this.listService.deleteCategory(id);
+    this.listService.deleteCategory(id).subscribe({
+      next: (message) => this.refresh(),
+      error: (error) => this.errorMessage = error.error.message
+    });
   }
 
   public createCategory(): Category {
-    return {"categoryId": 0, "name": "", "type": CategoryType.food}
+    return {"id": 0, "name": "", "type": CategoryType.food}
   }
 }

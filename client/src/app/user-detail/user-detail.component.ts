@@ -34,7 +34,7 @@ export class UserDetailComponent implements OnInit {
   errorMessage = "";
 
   ngOnInit(): void {
-    if (this.user.userId == 0) {
+    if (this.user.id == 0) {
       this.isNew = true;
       this.edit();
     }
@@ -45,7 +45,7 @@ export class UserDetailComponent implements OnInit {
   }
 
   public confirmDelete() {
-    this.deleteEvent.emit(this.user.userId);
+    this.deleteEvent.emit(this.user.id);
   }
 
   public cancelDelete() {

@@ -15,9 +15,10 @@ export class JWTHttpInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError(
         (event: HttpErrorResponse) => {
-          // check if 401
           console.log(event);
-          this.router.navigate(["login"]);
+          if (event.status === 401) {
+            this.router.navigate(["login"]);
+          }
           return throwError(() => event);
         }
       )

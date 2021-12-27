@@ -34,7 +34,7 @@ export class CategoryDetailComponent implements OnInit {
   errorMessage = "";
 
   ngOnInit(): void {
-    if (this.category.categoryId == 0) {
+    if (this.category.id == 0) {
       this.isNew = true;
       this.edit();
     }
@@ -45,7 +45,7 @@ export class CategoryDetailComponent implements OnInit {
   }
 
   public confirmDelete() {
-    this.deleteEvent.emit(this.category.categoryId);
+    this.deleteEvent.emit(this.category.id);
   }
 
   public cancelDelete() {

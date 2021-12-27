@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MessageResponse } from '../models/message';
 import { Table } from '../models/table';
 import { TableListService } from '../table-list.service';
 
@@ -18,7 +19,10 @@ export class TableListComponent {
   }
 
   public refresh() {
-    this.tableList = this.listService.getTableList();
+    this.listService.getTableList().subscribe({
+      next: (tableList: Table[]) => this.tableList = tableList,
+      error: (error) => console.log(error)
+    });
   }
 
   public add() {
@@ -30,20 +34,27 @@ export class TableListComponent {
     this.isAdd = false;
   }
 
-  public saveTable(table: Table, oldNumber: number) {
-    if (table.number != oldNumber && this.listService.getTableByNumber(table.number) !== undefined) {
-      this.errorMessage = "Duplicate table number!"
-    } else if (oldNumber == 0) {
+  public saveTable(table: Table, oldId: number) {
+    if (oldId == 0) {
       this.errorMessage = "";
-      this.listService.addTable(table);
+      this.listService.addTable(table).subscribe({
+        next: (message) => this.refresh(),
+        error: (error) => this.errorMessage = error.error.message
+      });
       this.cancelAdd();
     } else {
       this.errorMessage = "";
-      this.listService.updateTable(table, oldNumber);
+      this.listService.updateTable(table, oldId).subscribe({
+        next: (message) => this.refresh(),
+        error: (error) => this.errorMessage = error.error.message
+      });
     }
   }
 
   public deleteTable(number: number) {
-    this.listService.deleteTable(number);
+    this.listService.deleteTable(number).subscribe({
+      next: (message) => this.refresh(),
+      error: (error) => this.errorMessage = error.error.message
+    });
   }
 }

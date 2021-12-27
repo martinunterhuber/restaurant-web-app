@@ -4,11 +4,11 @@
   <div *ngIf="!isEdit">
     <table>
       <tbody>
-        <tr><td>ID </td> <td>{{ menuItem.itemId }}</td></tr>
+        <tr><td>ID </td> <td>{{ menuItem.id }}</td></tr>
         <tr><td>Title </td> <td>{{ menuItem.title }}</td></tr>
-        <tr><td>Description </td> <td>{{ menuItem.desc }}</td></tr>
+        <tr><td>Description </td> <td>{{ menuItem.description }}</td></tr>
         <tr><td>Price </td> <td>{{ menuItem.price }}</td></tr>
-        <tr><td>Categories </td> <td>{{ menuItem.category }}</td></tr>
+        <tr><td>Categories </td> <td>{{ menuItem.categories }}</td></tr>
         <tr><td>Allergens </td> <td>{{ menuItem.allergens }}</td></tr>
         <tr><td>Status </td> <td>{{ menuItem.status }}</td></tr>
       </tbody>
@@ -32,7 +32,7 @@
     <div>
       <mat-form-field appearance="outline">
         <mat-label>Description</mat-label>
-        <textarea matInput id="desc" name="desc" [(ngModel)]="editedMenuItem!.desc"></textarea>
+        <textarea matInput id="description" name="description" [(ngModel)]="editedMenuItem!.description"></textarea>
       </mat-form-field>
     </div>
     <div>
@@ -44,9 +44,9 @@
     <div>
       <mat-form-field appearance="outline">
         <mat-label>Categories</mat-label>
-        <mat-select #categorySelect multiple [(ngModel)]="editedMenuItem!.category" name="category" id="category">
-          <ng-container *ngFor="let category of getCategoryList()">
-            <mat-option [value]="category.categoryId">{{ category.name }}</mat-option>
+        <mat-select #categorySelect multiple [(ngModel)]="editedMenuItem!.categories" name="categories" id="categories">
+          <ng-container *ngFor="let category of categoryList">
+            <mat-option [value]="category.id">{{ category.name }}</mat-option>
           </ng-container>
         </mat-select>
       </mat-form-field>

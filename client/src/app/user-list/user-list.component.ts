@@ -18,7 +18,10 @@ export class UserListComponent {
   }
 
   public refresh() {
-    this.userList = this.listService.getUserList();
+    this.listService.getUserList().subscribe({
+      next: (userList: User[]) => this.userList = userList,
+      error: (error) => console.log(error)
+    });
   }
 
   public add() {
@@ -31,24 +34,30 @@ export class UserListComponent {
   }
 
   public saveUser(user: User) {
-    // if (user.name != oldName && this.listService.getUserByName(user.name) !== undefined) {
-    //   this.errorMessage = "Duplicate user name!"
-    // } else 
-    if (user.userId == 0) {
+    if (user.id == 0) {
       this.errorMessage = "";
-      this.listService.addUser(user);
+      this.listService.addUser(user).subscribe({
+        next: (message) => this.refresh(),
+        error: (error) => this.errorMessage = error.error.message
+      });
       this.cancelAdd();
     } else {
       this.errorMessage = "";
-      this.listService.updateUser(user);
+      this.listService.updateUser(user).subscribe({
+        next: (message) => this.refresh(),
+        error: (error) => this.errorMessage = error.error.message
+      });
     }
   }
 
   public deleteUser(id: number) {
-    this.listService.deleteUser(id);
+    this.listService.deleteUser(id).subscribe({
+      next: (message) => this.refresh(),
+      error: (error) => this.errorMessage = error.error.message
+    });
   }
 
   public createUser(): User {
-    return {"userId": 0, "role": [], "name": "", "password": ""}
+    return {"id": 0, "role": [], "name": "", "password": ""}
   }
 }

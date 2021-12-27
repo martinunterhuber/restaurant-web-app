@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CategoryListService } from '../category-list.service';
+import { Category } from '../models/category';
 import { Allergen, MenuItem } from '../models/menu_item';
 
 @Component({
@@ -13,6 +14,9 @@ export class MenuItemDetailComponent implements OnInit {
 
   @Input()
   menuItem!: MenuItem;
+
+  @Input()
+  categoryList!: Category[];
   
   editedMenuItem: MenuItem | undefined;
 
@@ -39,7 +43,7 @@ export class MenuItemDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.menuItem.itemId == 0) {
+    if (this.menuItem.id == 0) {
       this.isNew = true;
       this.edit();
     }
@@ -50,7 +54,7 @@ export class MenuItemDetailComponent implements OnInit {
   }
 
   public confirmDelete() {
-    this.deleteEvent.emit(this.menuItem.itemId);
+    this.deleteEvent.emit(this.menuItem.id);
   }
 
   public cancelDelete() {
@@ -78,9 +82,5 @@ export class MenuItemDetailComponent implements OnInit {
 
   public getAllergen(allergen: string) {
     return this.ALLERGENS[allergen as keyof typeof Allergen]
-  }
-
-  public getCategoryList() {
-    return this.categoryListService.getCategoryList();
   }
 }

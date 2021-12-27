@@ -1,41 +1,33 @@
 import { Injectable } from '@angular/core';
 import globalMenuItemList from '../assets/menu_Items.json';
 import { MenuItem } from './models/menu_item';
+import { HttpClient } from '@angular/common/http';
+import { MessageResponse } from './models/message';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuItemListService {
-  static id = 11;
-  private menuItemList: MenuItem[] = [];
+  constructor(private client: HttpClient) { }
 
-  constructor() {
-    this.menuItemList = globalMenuItemList as MenuItem[];
+  public getMenuItemList(): Observable<MenuItem[]> {
+    return this.client.get<MenuItem[]>("http://localhost:3000/menuitems");
   }
 
-  public getMenuItemList(): MenuItem[] {
-    return this.menuItemList;
+  public getMenuItemById(id: number): Observable<MenuItem> {
+    return this.client.get<MenuItem>("http://localhost:3000/menuitems/" + id);
   }
 
-  public getMenuItemById(id: number): MenuItem | undefined {
-    return this.menuItemList.find(menuItem => menuItem.itemId == id);
+  public addMenuItem(menuItem: MenuItem): Observable<MessageResponse> {
+    return this.client.post<MessageResponse>("http://localhost:3000/menuitems", menuItem);
   }
 
-  public addMenuItem(menuItem: MenuItem) {
-    // This should be handle by the database later
-    menuItem.itemId = MenuItemListService.id++;
-    this.menuItemList.push(menuItem);
+  public updateMenuItem(menuItem: MenuItem): Observable<MessageResponse> {
+    return this.client.put<MessageResponse>("http://localhost:3000/menuitems/" + menuItem.id, menuItem);
   }
 
-  public updateMenuItem(menuItem: MenuItem) {
-    this.menuItemList[this.menuItemList.findIndex(c => c.itemId == menuItem.itemId)] = menuItem;
+  public deleteMenuItem(id: number): Observable<MessageResponse> {
+    return this.client.delete<MessageResponse>("http://localhost:3000/menuitems/" + id);
   }
-
-  public deleteMenuItem(id: number) {
-    let menuItemIndex = this.menuItemList.findIndex(menuItem => menuItem.itemId == id);
-    if (menuItemIndex >= 0) {
-      this.menuItemList.splice(menuItemIndex, 1);
-    }
-  }
-
 }

@@ -1,11 +1,11 @@
 <mat-card *ngIf="table" style="margin: 1rem;">
-  <h2>Table #{{ table.number }}</h2>
+  <h2>Table #{{ table.id }}</h2>
   <div *ngIf="!isEdit">
     <table>
       <tbody>
-        <tr><td>Number</td> <td>{{ table.number }}</td></tr>
-        <tr><td>Seats <td>{{ table.seats }}</td></tr>
-        <tr><td>Location</td> <td>{{ table.location }}</td></tr>
+        <tr><td>Number</td> <td>{{ table.id }}</td></tr>
+        <tr><td>Seats <td>{{ table.capacity }}</td></tr>
+        <tr><td>Location</td> <td>{{ table.description }}</td></tr>
       </tbody>
     </table>
     <button *ngIf="!isDelete && !isNew" mat-raised-button color="primary" (click)="edit()"><mat-icon>edit</mat-icon> Edit</button>
@@ -21,19 +21,19 @@
     <div>
       <mat-form-field appearance="outline">
         <mat-label>Number</mat-label>
-        <input matInput type="number" min="1" id="number" name="number" required [(ngModel)]="editedTable!.number">
+        <input matInput type="number" min="1" id="number" name="number" required [(ngModel)]="editedTable!.id">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field appearance="outline">
         <mat-label>Seats</mat-label>
-        <input matInput type="number" min="1" id="seats" name="seats" required [(ngModel)]="editedTable!.seats">
+        <input matInput type="number" min="1" id="seats" name="seats" required [(ngModel)]="editedTable!.capacity">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field appearance="outline">
         <mat-label>Location</mat-label>
-        <input matInput type="text" id="location" name="location" [(ngModel)]="editedTable!.location">
+        <input matInput type="text" id="location" name="location" [(ngModel)]="editedTable!.description">
       </mat-form-field>
     </div>
     <button mat-raised-button color="primary" (click)="save()"><mat-icon>save</mat-icon> Save</button>

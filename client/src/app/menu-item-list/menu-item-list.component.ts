@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { CategoryListService } from '../category-list.service';
 import { MenuItemListService } from '../menu-item-list.service';
+import { Category } from '../models/category';
 import { MenuItem } from '../models/menu_item';
 
 @Component({
@@ -9,16 +11,24 @@ import { MenuItem } from '../models/menu_item';
 })
 export class MenuItemListComponent {
   menuItemList: MenuItem[] = [];
+  categoryList: Category[] = [];
 
   isAdd = false;
   errorMessage = "";
 
-  constructor(private listService: MenuItemListService) {
+  constructor(private listService: MenuItemListService, private categoryListService: CategoryListService) {
     this.refresh();
   }
 
   public refresh() {
-    this.menuItemList = this.listService.getMenuItemList();
+    this.listService.getMenuItemList().subscribe({
+      next: (menuItemList: MenuItem[]) => this.menuItemList = menuItemList,
+      error: (error) => console.log(error)
+    });
+    this.categoryListService.getCategoryList().subscribe({
+      next: (categoryList: Category[]) => this.categoryList = categoryList,
+      error: (error) => console.log(error)
+    });
   }
 
   public add() {
@@ -31,24 +41,30 @@ export class MenuItemListComponent {
   }
 
   public saveMenuItem(menuItem: MenuItem) {
-    // if (menuItem.name != oldName && this.listService.getMenuItemByName(menuItem.name) !== undefined) {
-    //   this.errorMessage = "Duplicate menuItem name!"
-    // } else 
-    if (menuItem.itemId == 0) {
+    if (menuItem.id == 0) {
       this.errorMessage = "";
-      this.listService.addMenuItem(menuItem);
+      this.listService.addMenuItem(menuItem).subscribe({
+        next: (message) => this.refresh(),
+        error: (error) => this.errorMessage = error.error.message
+      });
       this.cancelAdd();
     } else {
       this.errorMessage = "";
-      this.listService.updateMenuItem(menuItem);
+      this.listService.updateMenuItem(menuItem).subscribe({
+        next: (message) => this.refresh(),
+        error: (error) => this.errorMessage = error.error.message
+      });
     }
   }
 
   public deleteMenuItem(id: number) {
-    this.listService.deleteMenuItem(id);
+    this.listService.deleteMenuItem(id).subscribe({
+      next: (message) => this.refresh(),
+      error: (error) => this.errorMessage = error.error.message
+    });
   }
 
   public createMenuItem(): MenuItem {
-    return {"itemId": 0, "title": "", "desc": "", price: 0, category: [], allergens: [], status: "available"}
+    return {"id": 0, "title": "", "description": "", price: 0, categories: [], allergens: [], status: "available"}
   }
 }

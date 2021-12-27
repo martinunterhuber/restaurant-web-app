@@ -13,6 +13,6 @@
   (cancelEvent)="cancelAdd()" 
   (saveEvent)="saveTable($event.table, $event.oldNumber)"
   (deleteEvent)="deleteTable($event)"
-  [table]="{'number': 0, 'seats': 0, 'location': ''}"
+  [table]="{'id': 0, 'capacity': 0, 'description': ''}"
   [listErrorMessage]="errorMessage"
   ></app-table-detail>

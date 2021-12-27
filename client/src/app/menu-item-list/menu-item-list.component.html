@@ -5,6 +5,7 @@
     (saveEvent)="saveMenuItem($event)"
     (deleteEvent)="deleteMenuItem($event)"
     [listErrorMessage]="errorMessage"
+    [categoryList]="categoryList"
     ></app-menu-item-detail>
 </div>
 <button *ngIf="!isAdd" (click)="add()" mat-raised-button color="primary"><mat-icon>add</mat-icon> Add New Menu Item</button>
@@ -15,4 +16,5 @@
   (deleteEvent)="deleteMenuItem($event)"
   [menuItem]="createMenuItem()"
   [listErrorMessage]="errorMessage"
+  [categoryList]="categoryList"
   ></app-menu-item-detail>

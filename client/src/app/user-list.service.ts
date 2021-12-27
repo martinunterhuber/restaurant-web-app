@@ -1,40 +1,33 @@
 import { Injectable } from '@angular/core';
 import globalUserList from '../assets/users.json';
 import { User } from './models/user';
+import { HttpClient } from '@angular/common/http';
+import { MessageResponse } from './models/message';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserListService {
-  static id = 4;
-  private userList: User[] = [];
+  constructor(private client: HttpClient) { }
 
-  constructor() {
-    this.userList = globalUserList as User[];
+  public getUserList(): Observable<User[]> {
+    return this.client.get<User[]>("http://localhost:3000/users");
   }
 
-  public getUserList(): User[] {
-    return this.userList;
+  public getUserById(id: number): Observable<User> {
+    return this.client.get<User>("http://localhost:3000/users/" + id);
   }
 
-  public getUserById(id: number): User | undefined {
-    return this.userList.find(user => user.userId == id);
+  public addUser(user: User): Observable<MessageResponse> {
+    return this.client.post<MessageResponse>("http://localhost:3000/users", user);
   }
 
-  public addUser(user: User) {
-    // This should be handle by the database later
-    user.userId = UserListService.id++;
-    this.userList.push(user);
+  public updateUser(user: User): Observable<MessageResponse> {
+    return this.client.put<MessageResponse>("http://localhost:3000/users/" + user.id, user);
   }
 
-  public updateUser(user: User) {
-    this.userList[this.userList.findIndex(c => c.userId == user.userId)] = user;
-  }
-
-  public deleteUser(id: number) {
-    let userIndex = this.userList.findIndex(user => user.userId == id);
-    if (userIndex >= 0) {
-      this.userList.splice(userIndex, 1);
-    }
+  public deleteUser(id: number): Observable<MessageResponse> {
+    return this.client.delete<MessageResponse>("http://localhost:3000/users/" + id);
   }
 }

@@ -1,41 +1,33 @@
 import { Injectable } from '@angular/core';
 import { Category } from './models/category';
 import globalCategoryList from '../assets/categories.json';
+import { HttpClient } from '@angular/common/http';
+import { MessageResponse } from './models/message';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryListService {
-  static id = 3;
-  private categoryList: Category[] = [];
+  constructor(private client: HttpClient) { }
 
-  constructor() {
-    this.categoryList = globalCategoryList as Category[];
+  public getCategoryList(): Observable<Category[]> {
+    return this.client.get<Category[]>("http://localhost:3000/categories");
   }
 
-  public getCategoryList(): Category[] {
-    return this.categoryList;
+  public getCategoryById(id: number): Observable<Category> {
+    return this.client.get<Category>("http://localhost:3000/categories/" + id);
   }
 
-  public getCategoryById(id: number): Category | undefined {
-    return this.categoryList.find(category => category.categoryId == id);
+  public addCategory(category: Category): Observable<MessageResponse> {
+    return this.client.post<MessageResponse>("http://localhost:3000/categories", category);
   }
 
-  public addCategory(category: Category) {
-    // This should be handle by the database later
-    category.categoryId = CategoryListService.id++;
-    this.categoryList.push(category);
+  public updateCategory(category: Category): Observable<MessageResponse> {
+    return this.client.put<MessageResponse>("http://localhost:3000/categories/" + category.id, category);
   }
 
-  public updateCategory(category: Category) {
-    this.categoryList[this.categoryList.findIndex(c => c.categoryId == category.categoryId)] = category;
+  public deleteCategory(id: number): Observable<MessageResponse> {
+    return this.client.delete<MessageResponse>("http://localhost:3000/categories/" + id);
   }
-
-  public deleteCategory(id: number) {
-    let categoryIndex = this.categoryList.findIndex(category => category.categoryId == id);
-    if (categoryIndex >= 0) {
-      this.categoryList.splice(categoryIndex, 1);
-    }
-  }
-
 }

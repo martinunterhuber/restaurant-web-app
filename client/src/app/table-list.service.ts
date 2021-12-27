@@ -1,37 +1,32 @@
 import { Injectable } from '@angular/core';
 import { Table } from './models/table';
-import globalTableList from '../assets/tables.json';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { MessageResponse } from './models/message';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TableListService {
-  private tableList: Table[] = [];
+  constructor(private client: HttpClient) { }
 
-  constructor() {
-    this.tableList = globalTableList;
+  public getTableList(): Observable<Table[]> {
+    return this.client.get<Table[]>("http://localhost:3000/tables");
   }
 
-  public getTableList(): Table[] {
-    return this.tableList;
+  public getTableById(id: number): Observable<Table> {
+    return this.client.get<Table>("http://localhost:3000/tables/" + id);
   }
 
-  public getTableByNumber(number: number): Table | undefined {
-    return this.tableList.find(table => table.number == number);
+  public addTable(table: Table): Observable<MessageResponse> {
+    return this.client.post<MessageResponse>("http://localhost:3000/tables", table);
   }
 
-  public addTable(table: Table) {
-    this.tableList.push(table);
+  public updateTable(table: Table, oldId: number): Observable<MessageResponse> {
+    return this.client.put<MessageResponse>("http://localhost:3000/tables/" + oldId, table);
   }
 
-  public updateTable(table: Table, oldNumber: number) {
-    this.tableList[this.tableList.findIndex(table => table.number == oldNumber)] = table;
-  }
-
-  public deleteTable(number: number) {
-    let tableIndex = this.tableList.findIndex(table => table.number == number);
-    if (tableIndex >= 0) {
-      this.tableList.splice(tableIndex, 1);
-    }
+  public deleteTable(id: number): Observable<MessageResponse> {
+    return this.client.delete<MessageResponse>("http://localhost:3000/tables/" + id);
   }
 }

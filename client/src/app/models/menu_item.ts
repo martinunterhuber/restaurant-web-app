@@ -1,9 +1,9 @@
 export interface MenuItem {
-    itemId: number;
+    id: number;
     title: string;
-    desc: string;
+    description: string;
     price: number;
-    category: number[];
+    categories: number[];
     allergens: Allergen[];
     status: string;
 }
