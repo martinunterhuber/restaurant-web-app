@@ -13,11 +13,11 @@ router.post("/", async (req, res) => {
 
   try {
     let userInfo = req.body;
-    userId = userInfo.id;
+    userName = userInfo.name;
     userPass = userInfo.pass;
 
-    if (userId == null || userId === "") {
-      res.status(400).json({ message: "id must be given" });
+    if (userName == null || userName === "") {
+      res.status(400).json({ message: "name must be given" });
       return;
     }
 
@@ -27,8 +27,8 @@ router.post("/", async (req, res) => {
     }
 
     let result = await pool.query({
-      text: "SELECT * from users WHERE id=$1 AND password=$2",
-      values: [userId, userPass],
+      text: "SELECT name, to_json(role) as roles from users WHERE name=$1 AND password=$2",
+      values: [userName, userPass],
     });
 
     if (result.rowCount === 0) {
@@ -37,20 +37,13 @@ router.post("/", async (req, res) => {
     }
 
     userResult = result.rows[0];
-    roles = userResult.role;
+    roles = userResult.roles;
 
-
-
-    if (!roles.includes("Backoffice")) {
-        res.status(400).send({message: "user is not from the management"});
-        return;
-    }
-  
-
-    const token = jwt.sign({ user: userId }, "secret", { expiresIn: 60 * 60 });
+    const token = jwt.sign({ user: userName, roles: roles }, "secret", { expiresIn: 60 * 60 });
     res.status(200).json({
       message: "login successful",
-      login: userId,
+      login: userName,
+      roles: roles,
       token: token,
     });
   } catch (error) {

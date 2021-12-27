@@ -17,16 +17,16 @@ const loginRoutes = require("./Routes/login");
 app.use("/login", loginRoutes);
 
 const tableRoutes = require("./Routes/tables-routes");
-app.use("/tables", checkAuth, tableRoutes);
+app.use("/tables", checkAuth(["Backoffice"]), tableRoutes);
 
 const categoryRoutes = require("./Routes/categories-routes");
-app.use("/categories", checkAuth, categoryRoutes);
+app.use("/categories", checkAuth(["Backoffice"]), categoryRoutes);
 
 const userRoutes = require("./Routes/users-routes");
-app.use("/users", checkAuth, userRoutes);
+app.use("/users", checkAuth(["Backoffice"]), userRoutes);
 
 const menuItemRoutes = require("./Routes/menu-item-routes");
-app.use("/menuitems", checkAuth, menuItemRoutes);
+app.use("/menuitems", checkAuth(["Backoffice"]), menuItemRoutes);
 
 app.get("/", (req, res) => {
   res.setHeader("Content-Type", "application/json");

@@ -1,11 +1,18 @@
 let cfg = require("../config.json");
 const jwt = require("jsonwebtoken");
 
-module.exports = (req, res, next) => {
+module.exports = (roles) => (req, res, next) => {
   try{
     let token = req.headers.authorization;
-    jwt.verify(token, "secret");  
-    next();
+    let content = jwt.verify(token, "secret");  
+
+    if (roles === undefined) {
+      next();
+    } else if (roles.some((role) => content.roles.find(r => r === role) !== undefined)) {
+      next();
+    } else {
+      return res.status(403).json({message: "Forbidden"});
+    }
 } catch(error){ 
-    return res.status(400).json({message: "Authentication failed"});}
+    return res.status(401).json({message: "Unauthorized"});}
 };
