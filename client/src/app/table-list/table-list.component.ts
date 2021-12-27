@@ -9,7 +9,7 @@ import { TableListService } from '../table-list.service';
   styleUrls: ['./table-list.component.css']
 })
 export class TableListComponent {
-  tableList: Table[] = [];
+  tableList: Table[] | null = null;
 
   isAdd = false;
   errorMessage = "";

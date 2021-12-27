@@ -10,7 +10,7 @@ import { MenuItem } from '../models/menu_item';
   styleUrls: ['./menu-item-list.component.css']
 })
 export class MenuItemListComponent {
-  menuItemList: MenuItem[] = [];
+  menuItemList: MenuItem[] | null = null;
   categoryList: Category[] = [];
 
   isAdd = false;

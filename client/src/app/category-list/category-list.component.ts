@@ -8,7 +8,7 @@ import { Category, CategoryType } from '../models/category';
   styleUrls: ['./category-list.component.css']
 })
 export class CategoryListComponent {
-  categoryList: Category[] = [];
+  categoryList: Category[] | null = null;
 
   isAdd = false;
   errorMessage = "";

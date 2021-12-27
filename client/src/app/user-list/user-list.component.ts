@@ -8,7 +8,7 @@ import { UserListService } from '../user-list.service';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent {
-  userList: User[] = [];
+  userList: User[] | null = null;
 
   isAdd = false;
   errorMessage = "";

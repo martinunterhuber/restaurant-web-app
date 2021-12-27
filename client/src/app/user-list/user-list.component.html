@@ -1,18 +1,20 @@
-<div class="list-grid">
-  <app-user-detail
-    *ngFor="let user of userList" 
-    [user]="user"
+<div *ngIf="userList !== null">
+  <div class="list-grid">
+    <app-user-detail
+      *ngFor="let user of userList" 
+      [user]="user"
+      (saveEvent)="saveUser($event)"
+      (deleteEvent)="deleteUser($event)"
+      [listErrorMessage]="errorMessage"
+      ></app-user-detail>
+  </div>
+  <button *ngIf="!isAdd" (click)="add()" mat-raised-button color="primary"><mat-icon>add</mat-icon> Add New User</button>
+  <app-user-detail 
+    *ngIf="isAdd" 
+    (cancelEvent)="cancelAdd()" 
     (saveEvent)="saveUser($event)"
     (deleteEvent)="deleteUser($event)"
+    [user]="createUser()"
     [listErrorMessage]="errorMessage"
     ></app-user-detail>
 </div>
-<button *ngIf="!isAdd" (click)="add()" mat-raised-button color="primary"><mat-icon>add</mat-icon> Add New User</button>
-<app-user-detail 
-  *ngIf="isAdd" 
-  (cancelEvent)="cancelAdd()" 
-  (saveEvent)="saveUser($event)"
-  (deleteEvent)="deleteUser($event)"
-  [user]="createUser()"
-  [listErrorMessage]="errorMessage"
-  ></app-user-detail>
