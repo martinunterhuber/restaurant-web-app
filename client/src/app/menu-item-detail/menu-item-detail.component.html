@@ -8,7 +8,7 @@
         <tr><td>Title </td> <td>{{ menuItem.title }}</td></tr>
         <tr><td>Description </td> <td>{{ menuItem.description }}</td></tr>
         <tr><td>Price </td> <td>{{ menuItem.price }}</td></tr>
-        <tr><td>Categories </td> <td>{{ menuItem.categories }}</td></tr>
+        <tr><td>Categories </td> <td><span *ngFor="let cat of menuItem.categories; last as isLast">{{ getCategory(cat) }}<span *ngIf="!isLast">, </span></span></td></tr>
         <tr><td>Allergens </td> <td>{{ menuItem.allergens }}</td></tr>
         <tr><td>Status </td> <td>{{ menuItem.status }}</td></tr>
       </tbody>

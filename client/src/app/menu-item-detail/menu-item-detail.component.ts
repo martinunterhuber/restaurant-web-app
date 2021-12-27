@@ -83,4 +83,9 @@ export class MenuItemDetailComponent implements OnInit {
   public getAllergen(allergen: string) {
     return this.ALLERGENS[allergen as keyof typeof Allergen]
   }
+
+  public getCategory(id: number): string {
+    let category = this.categoryList.find((cat) => cat.id == id);
+    return category ? category.name : "";
+  }
 }
