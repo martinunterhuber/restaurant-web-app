@@ -6,6 +6,7 @@
         <tr><td>Number</td> <td>{{ table.id }}</td></tr>
         <tr><td>Seats <td>{{ table.capacity }}</td></tr>
         <tr><td>Location</td> <td>{{ table.description }}</td></tr>
+        <tr><td>QR</td> <td><img [src]="qrCode"></td></tr>
       </tbody>
     </table>
     <button *ngIf="!isDelete && !isNew" mat-raised-button color="primary" (click)="edit()"><mat-icon>edit</mat-icon> Edit</button>

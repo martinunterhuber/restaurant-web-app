@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Table } from '../models/table';
+import QRCode from 'qrcode'
 
 @Component({
   selector: 'app-table-detail',
@@ -30,10 +31,14 @@ export class TableDetailComponent implements OnInit {
 
   errorMessage = "";
 
+  qrCode = "";
+
   ngOnInit(): void {
     if (this.table.id == 0) {
       this.isNew = true;
       this.edit();
+    } else {
+      this.getQrCode();
     }
   }
 
@@ -68,5 +73,16 @@ export class TableDetailComponent implements OnInit {
   public cancel() {
     this.isEdit = false;
     this.cancelEvent.emit();
+  }
+
+  public getQrCode() {
+    QRCode.toDataURL(`localhost:4200/#/guest/${this.table.id}`)
+      .then(url => {
+        this.qrCode = url;
+        console.log(url)
+      })
+      .catch(err => {
+        console.error(err)
+      })
   }
 }
