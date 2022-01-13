@@ -8,5 +8,6 @@
   <a *ngIf="isLoggedIn()" mat-button href="" routerLink="/logout">Logout</a>
 </mat-toolbar>
 <div style="margin: 1rem;">
+  <div class="error" *ngIf="!hasRole('Backoffice') && !isLoginView()">You have no access to the management view!</div>
   <router-outlet></router-outlet>
 </div>

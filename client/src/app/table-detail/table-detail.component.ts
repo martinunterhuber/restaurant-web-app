@@ -79,7 +79,6 @@ export class TableDetailComponent implements OnInit {
     QRCode.toDataURL(`localhost:4200/#/guest/${this.table.id}`)
       .then(url => {
         this.qrCode = url;
-        console.log(url)
       })
       .catch(err => {
         console.error(err)
